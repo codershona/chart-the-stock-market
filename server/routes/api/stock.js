@@ -1,4 +1,4 @@
-const request = requiure('superagent');
+const request = require('superagent');
 
 
 
@@ -21,6 +21,8 @@ module.exports = (app) => {
      
      for (let i =0; i < tickers.length; i += 1) {
 
+      const ticker = tickers[i];
+
 
       request
    // .get('/search')
@@ -28,12 +30,27 @@ module.exports = (app) => {
    .query({ 'function': 'TIME_SERIES_DAILY' })
    .query({ apikey: apiKey })
    .query({ symbol: ticker })
-   .then((res) => {
+   // .then(res => res.json())
+   .then((response) => {
     completed += 1;
+
+    // console.log('res', res.body['Meta Data']);
+    results.push(response.body['Meta Data']);
+
     // if (completed === i) {
        if (completed === tickers.length) {
 
       // All tickers have finished their requests
+
+      console.log('completed');
+
+      res.send({
+        success: true,
+        message: 'Ticker info',
+        results: results
+      })
+
+
 
     }
 
